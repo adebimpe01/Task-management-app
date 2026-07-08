@@ -52,8 +52,12 @@ export async function updateTask(
   const task = await db.task.update({
     where: { id },
     data: {
-      ...data,
-      dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
+      ...(data.title && { title: data.title }),
+      ...(data.description !== undefined && { description: data.description }),
+      ...(data.status && { status: data.status as any }),
+      ...(data.priority && { priority: data.priority as any }),
+      ...(data.dueDate ? { dueDate: new Date(data.dueDate) } : { dueDate: null }),
+      ...(data.assigneeId !== undefined && { assigneeId: data.assigneeId || null }),
     },
   })
 
